@@ -1,0 +1,53 @@
+- hosts: localhost
+  
+  vars:
+    jenkins_repo_path: /etc/yum.repos.d/jenkins.repo 
+    plugins_file: /vagrant/plugins.txt
+
+  tasks:
+
+  - name: install java
+    yum:
+      name: java-1.8.0-openjdk
+      state: latest
+
+  - name: check jenkins repo exists
+    stat: path={{ jenkins_repo_path }}
+    register: jenkins_repo
+
+  - name: install jenknis repo
+    uri:
+      url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+      dest: "{{ jenkins_repo_path }}"
+    when: jenkins_repo.stat.exists == false
+
+  - name: install key
+    rpm_key:
+      state: present
+      key: http://pkg.jenkins-ci.org/redhat-stable/jenkins-ci.org.key
+
+  - name: install jenkins
+    yum:
+      name: jenkins
+      state: latest
+  
+  - name: enable and start firewalld
+    systemd:
+      name: firewalld
+      state: started
+      enabled: true
+
+  - name: open firewall on 8080
+    command: firewall-cmd --zone=public --permanent --add-port=8080/tcp
+
+  - name: start jenkins
+    systemd:
+      name: jenkins
+      state: started
+      enabled: true 
+
+  - name: check plugins.txt exists
+    stat: path={{ plugins_file }}
+
+  - name: install plugins
+    command: /vagrant/install_jenkins_plugins.sh -p "{{ plugins_file }}" --plugindir /var/lib/jenkins/plugins
