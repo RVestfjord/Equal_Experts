@@ -9,6 +9,6 @@ If the file plugins.txt is present and contains a list of plugins during the pro
 Requirements
 ============
 
-You need to install the vbguest . To do so run the following command:
+You need to install the vbguest plugin. To do so run the following command:
  $ vagrant plugin install vagrant-vbguest
 
