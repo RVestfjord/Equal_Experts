@@ -5,3 +5,10 @@ This repo contains all files necessary to configure and start a Jenkins inside a
 If the file plugins.txt is present and contains a list of plugins during the provisioning the jenkins plugins in that file will be installed automatically.
 /var/lib/jenkins of the guest will be exposed as jenkins_var on the host.
 
+
+Requirements
+============
+
+You need to install the vbguest . To do so run the following command:
+ $ vagrant plugin install vagrant-vbguest
+

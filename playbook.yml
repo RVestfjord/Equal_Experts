@@ -30,7 +30,7 @@
     yum:
       name: jenkins
       state: latest
-  
+
   - name: enable and start firewalld
     systemd:
       name: firewalld
